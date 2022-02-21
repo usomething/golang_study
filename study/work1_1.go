@@ -7,7 +7,7 @@ func changeArray() []string {
 	for index, val := range arr {
 		switch val {
 		case "stupid":
-			arr[index] = "smart"
+			arr[index] = "clever"
 		case "weak":
 			arr[index] = "strong"
 		}
