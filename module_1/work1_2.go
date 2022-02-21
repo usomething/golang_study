@@ -1,10 +1,6 @@
 package main
 
-import (
-	"fmt"
-	"time"
-)
-
+/*
 func main() {
 
 	chanInt := make(chan int, 10)
@@ -25,3 +21,4 @@ func main() {
 	}
 
 }
+*/
