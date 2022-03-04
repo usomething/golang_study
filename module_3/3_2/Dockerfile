@@ -1,29 +1,20 @@
 FROM ubuntu AS build
-RUN mkdir /root/.ssh/
-COPY id_rsa /root/.ssh/id_rsa
 
 RUN \
   apt-get -y update && \
-  apt-get -yqq install ssh
+  export DEBIAN_FRONTEND=noninteractive && \
+  apt-get install -y wget && \
+  apt-get install -y golang-go && \
+  apt-get install -y unzip
 
 RUN \
-  chmod 600 /root/.ssh/id_rsa && \
-  chown -R root:root /root/.ssh && \
-  touch /root/.ssh/known_hosts && \
-  ssh-keyscan github.com >> /root/.ssh/known_hosts  
+  wget https://codeload.github.com/usomething/golang_study/zip/refs/heads/main --no-check-certificate && \
+  unzip main && \
+  go build -o /root/http_server golang_study-main/module_2/1_2/http_server.go
 
 
-RUN \
-  apt-get install -y git && \
-  apt-get install -y golang-go
+FROM ubuntu AS run_go
+WORKDIR /root
+COPY --from=build /root/http_server /root/http_server
 
-RUN \
-  git clone "git@github.com:usomething/golang_study.git" && \
-  go build -o /root/http_server golang_study/module_2/1_2/http_server.go
- 
-
-FROM scratch
-COPY --from=build /root/http_server /bin/http_server
- 
-ENTRYPOINT ["/bin/http_server"]
-
+ENTRYPOINT ["/root/http_server"]
